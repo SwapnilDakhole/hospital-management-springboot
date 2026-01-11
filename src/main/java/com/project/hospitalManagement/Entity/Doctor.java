@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -30,8 +32,9 @@ public class Doctor {
     private String email;
 
     @OneToMany(mappedBy = "doctor")         // inverse side
-    private List<Appointment> appointments;
+    private List<Appointment> appointments = new ArrayList<>();
 
     @ManyToMany(mappedBy = "doctors")
-    private Set<Department> department;
+    private Set<Department> department = new HashSet<>();
+
 }
