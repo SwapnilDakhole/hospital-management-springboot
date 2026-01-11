@@ -1,21 +1,34 @@
-INSERT INTO patient (name, birth_date, email, gender, created_at, blood_group) VALUES
-('John Smith', '1985-02-20', 'john.smith@example.com', 'Male', CURRENT_TIME, 'A_POSITIVE'),
-('Jane Doe', '1990-07-15', 'jane.doe@example.com', 'Female', CURRENT_TIME, 'O_NEGATIVE'),
-('Peter Jones', '1978-11-30', 'peter.jones@example.com', 'Male', CURRENT_TIME, 'B_POSITIVE'),
-('Mary Johnson', '1992-04-10', 'mary.johnson@example.com', 'Female', CURRENT_TIME, 'AB_NEGATIVE'),
-('David Williams', '1988-09-05', 'david.williams@example.com', 'Male', CURRENT_TIME, 'A_NEGATIVE'),
-('Sarah Brown', '1995-12-25', 'sarah.brown@example.com', 'Female', CURRENT_TIME, 'O_POSITIVE'),
-('Michael Davis', '1980-01-12', 'michael.davis@example.com', 'Male', CURRENT_TIME, 'B_NEGATIVE'),
-('Jennifer Miller', '1998-06-18', 'jennifer.miller@example.com', 'Female', CURRENT_TIME, 'AB_POSITIVE'),
-('Robert Wilson', '1975-03-08', 'robert.wilson@example.com', 'Male', CURRENT_TIME, 'A_POSITIVE'),
-('Linda Moore', '1993-10-01', 'linda.moore@example.com', 'Female', CURRENT_TIME, 'O_NEGATIVE'),
-('William Taylor', '1982-08-14', 'william.taylor@example.com', 'Male', CURRENT_TIME, 'B_POSITIVE'),
-('Elizabeth Anderson', '1996-05-22', 'elizabeth.anderson@example.com', 'Female', CURRENT_TIME, 'AB_NEGATIVE'),
-('James Thomas', '1979-09-19', 'james.thomas@example.com', 'Male', CURRENT_TIME, 'A_NEGATIVE'),
-('Patricia Jackson', '1991-02-28', 'patricia.jackson@example.com', 'Female', CURRENT_TIME, 'O_POSITIVE'),
-('Charles White', '1986-11-03', 'charles.white@example.com', 'Male', CURRENT_TIME, 'B_NEGATIVE'),
-('Barbara Harris', '1999-08-21', 'barbara.harris@example.com', 'Female', CURRENT_TIME, 'AB_POSITIVE'),
-('Joseph Martin', '1983-04-27', 'joseph.martin@example.com', 'Male', CURRENT_TIME, 'A_POSITIVE'),
-('Susan Thompson', '1994-01-07', 'susan.thompson@example.com', 'Female', CURRENT_TIME, 'O_NEGATIVE'),
-('Thomas Garcia', '1989-07-03', 'thomas.garcia@example.com', 'Male', CURRENT_TIME, 'B_POSITIVE'),
-('Karen Martinez', '1997-03-11', 'karen.martinez@example.com', 'Female', CURRENT_TIME, 'AB_NEGATIVE');
+-- Insert dummy data in an order that respects dependencies
+
+-- Insert into tables with no foreign keys first
+INSERT INTO insurance (provider, policy_number, valid_until, created_at) VALUES
+('Blue Cross', 'BC12345', '2025-12-31', CURRENT_TIMESTAMP),
+('Aetna', 'AE67890', '2026-06-30', CURRENT_TIMESTAMP),
+('Cigna', 'CI54321', '2024-11-15', CURRENT_TIMESTAMP);
+
+INSERT INTO doctor (name, specialization, email) VALUES
+('Dr. James Smith', 'Cardiology', 'james.smith@example.com'),
+('Dr. Mary Johnson', 'Neurology', 'mary.johnson@example.com'),
+('Dr. Robert Williams', 'Pediatrics', 'robert.williams@example.com');
+
+-- Insert into tables that have foreign keys
+INSERT INTO patient (name, birth_date, email, gender, created_at, blood_group, insurance_id) VALUES
+('John Smith', '1985-02-20', 'john.smith@example.com', 'Male', CURRENT_TIME, 'A_POSITIVE', 1),
+('Jane Doe', '1990-07-15', 'jane.doe@example.com', 'Female', CURRENT_TIME, 'O_NEGATIVE', 2),
+('Peter Jones', '1978-11-30', 'peter.jones@example.com', 'Male', CURRENT_TIME, 'B_POSITIVE', 3);
+
+INSERT INTO department (name, head_doctor_id) VALUES
+('Cardiology', 1),
+('Neurology', 2),
+('Pediatrics', 3);
+
+-- Insert into join/linking tables
+INSERT INTO department_doctor (department_id, doctor_id) VALUES
+(1, 1),
+(2, 2),
+(3, 3);
+
+INSERT INTO appointment (appointment_time, reason, status, patient_id, doctor_id) VALUES
+(CURRENT_TIMESTAMP + INTERVAL '1 day', 'Annual Checkup', 'Scheduled', 1, 1),
+(CURRENT_TIMESTAMP + INTERVAL '2 day', 'Headache', 'Scheduled', 2, 2),
+(CURRENT_TIMESTAMP + INTERVAL '3 day', 'Fever', 'Scheduled', 3, 3);
