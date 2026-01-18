@@ -1,34 +1,22 @@
--- Insert dummy data in an order that respects dependencies
+INSERT INTO patient (name, gender, birth_date, email, blood_group)
+VALUES
+    ('Aarav Sharma', 'MALE', '1990-05-10', 'aarav.sharma@example.com', 'O_POSITIVE'),
+    ('Diya Patel', 'FEMALE', '1995-08-20', 'diya.patel@example.com', 'A_POSITIVE'),
+    ('Dishant Verma', 'MALE', '1988-03-15', 'dishant.verma@example.com', 'A_POSITIVE'),
+    ('Neha Iyer', 'FEMALE', '1992-12-01', 'neha.iyer@example.com', 'AB_POSITIVE'),
+    ('Kabir Singh', 'MALE', '1993-07-11', 'kabir.singh@example.com', 'O_POSITIVE');
 
--- Insert into tables with no foreign keys first
-INSERT INTO insurance (provider, policy_number, valid_until, created_at) VALUES
-('Blue Cross', 'BC12345', '2025-12-31', CURRENT_TIMESTAMP),
-('Aetna', 'AE67890', '2026-06-30', CURRENT_TIMESTAMP),
-('Cigna', 'CI54321', '2024-11-15', CURRENT_TIMESTAMP);
+INSERT INTO doctor (name, specialization, email)
+VALUES
+    ('Dr. Rakesh Mehta', 'Cardiology', 'rakesh.mehta@example.com'),
+    ('Dr. Sneha Kapoor', 'Dermatology', 'sneha.kapoor@example.com'),
+    ('Dr. Arjun Nair', 'Orthopedics', 'arjun.nair@example.com');
 
-INSERT INTO doctor (name, specialization, email) VALUES
-('Dr. James Smith', 'Cardiology', 'james.smith@example.com'),
-('Dr. Mary Johnson', 'Neurology', 'mary.johnson@example.com'),
-('Dr. Robert Williams', 'Pediatrics', 'robert.williams@example.com');
-
--- Insert into tables that have foreign keys
-INSERT INTO patient (name, birth_date, email, gender, created_at, blood_group, insurance_id) VALUES
-('John Smith', '1985-02-20', 'john.smith@example.com', 'Male', CURRENT_TIME, 'A_POSITIVE', 1),
-('Jane Doe', '1990-07-15', 'jane.doe@example.com', 'Female', CURRENT_TIME, 'O_NEGATIVE', 2),
-('Peter Jones', '1978-11-30', 'peter.jones@example.com', 'Male', CURRENT_TIME, 'B_POSITIVE', 3);
-
-INSERT INTO department (name, head_doctor_id) VALUES
-('Cardiology', 1),
-('Neurology', 2),
-('Pediatrics', 3);
-
--- Insert into join/linking tables
-INSERT INTO department_doctor (department_id, doctor_id) VALUES
-(1, 1),
-(2, 2),
-(3, 3);
-
-INSERT INTO appointment (appointment_time, reason, status, patient_id, doctor_id) VALUES
-(CURRENT_TIMESTAMP + INTERVAL '1 day', 'Annual Checkup', 'Scheduled', 1, 1),
-(CURRENT_TIMESTAMP + INTERVAL '2 day', 'Headache', 'Scheduled', 2, 2),
-(CURRENT_TIMESTAMP + INTERVAL '3 day', 'Fever', 'Scheduled', 3, 3);
+INSERT INTO appointment (appointment_time, reason, doctor_id, patient_id)
+VALUES
+  ('2025-07-01 10:30:00', 'General Checkup', 1, 2),
+  ('2025-07-02 11:00:00', 'Skin Rash', 2, 2),
+  ('2025-07-03 09:45:00', 'Knee Pain', 3, 3),
+  ('2025-07-04 14:00:00', 'Follow-up Visit', 1, 1),
+  ('2025-07-05 16:15:00', 'Consultation', 1, 4),
+  ('2025-07-06 08:30:00', 'Allergy Treatment', 2, 5);
